@@ -2,6 +2,7 @@ import pygame
 from sys import exit
 
 from .config import *
+from .renderer import Renderer
 
 
 class Application:
@@ -10,6 +11,9 @@ class Application:
 
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
         self.clock = pygame.time.Clock()
+
+        self.grid = [[' '] * TILES_WIDTH for _ in range(TILES_HEIGHT)]
+        self.renderer = Renderer(self.grid)
 
     @staticmethod
     def _quit() -> None:
@@ -29,6 +33,8 @@ class Application:
     def run(self) -> None:
         while True:
             self._handle_events()
+
+            self.renderer.render()
 
             pygame.display.flip()
             self.clock.tick(FRAME_RATE)
