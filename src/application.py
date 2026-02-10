@@ -8,6 +8,8 @@ from .renderer import Renderer
 
 class Application:
     def __init__(self) -> None:
+        print('Creating new application')
+
         pygame.init()
 
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
@@ -15,8 +17,6 @@ class Application:
 
         self.grid = generate_grid()
         self.renderer = Renderer(self.grid)
-
-        self.state = 'setup'
 
     @staticmethod
     def _quit() -> None:
@@ -35,8 +35,9 @@ class Application:
                     self.grid = generate_grid()
                     self.renderer.update_walls(self.grid)
 
-
     def run(self) -> None:
+        print('Running application')
+
         while True:
             self._handle_events()
 

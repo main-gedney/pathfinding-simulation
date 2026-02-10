@@ -4,6 +4,8 @@ from .config import *
 
 
 def generate_grid() -> list[list[int]]:
+    print('Generating new grid')
+
     grid = []
     for _ in range(TILES_HEIGHT):
         row = []
