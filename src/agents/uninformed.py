@@ -3,15 +3,19 @@ from ..config import TILES_WIDTH, TILES_HEIGHT, DIRECTIONS
 
 
 class Agent:
-    def __init__(self, grid: list[list[int]]) -> None:
+    def __init__(self, grid: list[list[int]], name: str) -> None:
         self.grid = grid
 
         self.frontier = [Node(1, 1)]
         self.explored = []
         self.path = []
 
-        self.path_found = False
         self.finished = False
+        self.path_found = False
+        self.path_length = -1
+
+        self.steps = 0
+        self.name = name
 
     @staticmethod
     def _goal_test(node: Node) -> bool:
@@ -23,6 +27,7 @@ class Agent:
 
         while node:
             self.path.append(node)
+            self.path_length += 1
             node = node.parent
 
     def _get_neighbors(self, node: Node) -> list[Node]:
@@ -49,6 +54,8 @@ class Agent:
             self.finished = True
             return True
 
+        self.steps += 1
+
         node = self._remove()
         if self._goal_test(node):
             self._get_path(node)
@@ -65,5 +72,17 @@ class Agent:
 
 
 class DepthFirst(Agent):
+    def __init__(self, grid: list[list[int]]) -> None:
+        super().__init__(grid, 'Depth-First')
+
     def _remove(self) -> Node:
         return self.frontier.pop()
+
+
+class BreadthFirst(Agent):
+    def __init__(self, grid: list[list[int]]) -> None:
+        super().__init__(grid, 'Breadth-First')
+
+    def _remove(self) -> Node:
+        return self.frontier.pop(0)
+

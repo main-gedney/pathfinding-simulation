@@ -1,3 +1,3 @@
 from .uninformed import *
 
-__all__ = ['Agent', 'DepthFirst']
+__all__ = ['Agent', 'DepthFirst', 'BreadthFirst']
