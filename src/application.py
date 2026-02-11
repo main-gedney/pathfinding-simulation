@@ -6,7 +6,7 @@ from .config import *
 from .grid import generate_grid
 from .renderer import Renderer
 
-agents = [DepthFirst, BreadthFirst]
+agents = [DepthFirst, BreadthFirst, BestFirst, AStar]
 
 
 class Application:

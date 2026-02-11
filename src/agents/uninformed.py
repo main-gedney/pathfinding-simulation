@@ -30,6 +30,10 @@ class Agent:
             self.path_length += 1
             node = node.parent
 
+    @staticmethod
+    def _create_node(x: int, y: int, parent: Node) -> Node:
+        return Node(x, y, parent)
+
     def _get_neighbors(self, node: Node) -> list[Node]:
         x, y = node.x, node.y
         nodes = []
@@ -38,7 +42,7 @@ class Agent:
             nx, ny = (x + dx), (y + dy)
             if 0 <= nx < TILES_WIDTH and 0 <= ny < TILES_HEIGHT:
                 if self.grid[ny][nx] == ' ':
-                    nodes.append(Node(nx, ny, node))
+                    nodes.append(self._create_node(nx, ny, node))
 
         return nodes
 

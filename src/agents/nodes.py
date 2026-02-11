@@ -5,6 +5,11 @@ class Node:
         self.parent = parent
         self.cost = cost
 
+        if parent:
+            self.distance = parent.distance + 1
+        else:
+            self.distance = 0
+
     def __str__(self) -> str:
         return f'({self.x}, {self.y})'
 
