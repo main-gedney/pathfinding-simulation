@@ -25,6 +25,4 @@ def generate_grid() -> list[list[int]]:
         for x in range(1, 4):
             grid[TILES_HEIGHT - y][TILES_WIDTH - x] = ' '
 
-    grid[TILES_HEIGHT - 2][TILES_WIDTH - 2] = 'x'
-
     return grid

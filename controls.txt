@@ -1,2 +1,4 @@
 [ESC] - Exit Application
+[SPACE] - Pause/Play pathfinding
 [G] - Generate new grid
+[R] - Reset agent

@@ -19,6 +19,7 @@ class Agent:
 
     def _get_path(self, node: Node) -> None:
         self.path_found = True
+        print('Path found')
 
         while node:
             self.path.append(node)
@@ -43,6 +44,8 @@ class Agent:
         if self.finished:
             return True
         if not self.frontier:
+            print('No solution found')
+
             self.finished = True
             return True
 
@@ -60,3 +63,7 @@ class Agent:
 
         return False
 
+
+class DepthFirst(Agent):
+    def _remove(self) -> Node:
+        return self.frontier.pop()
