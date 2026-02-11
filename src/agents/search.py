@@ -1,6 +1,22 @@
 from .nodes import Node
-from .uninformed import Agent
+from .agent import Agent
 from ..config import *
+
+
+class DepthFirst(Agent):
+    def __init__(self, grid: list[list[int]]) -> None:
+        super().__init__(grid, 'Depth-First')
+
+    def _remove(self) -> Node:
+        return self.frontier.pop()
+
+
+class BreadthFirst(Agent):
+    def __init__(self, grid: list[list[int]]) -> None:
+        super().__init__(grid, 'Breadth-First')
+
+    def _remove(self) -> Node:
+        return self.frontier.pop(0)
 
 
 class BestFirst(Agent):
