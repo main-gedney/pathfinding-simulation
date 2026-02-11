@@ -7,3 +7,6 @@ class Node:
 
     def __str__(self) -> str:
         return f'({self.x}, {self.y})'
+
+    def __eq__(self, other: 'Node') -> bool:
+        return self.x == other.x and self.y == other.y

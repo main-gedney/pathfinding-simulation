@@ -1,65 +1,62 @@
 from .nodes import Node
-from ..config import TILES_WIDTH, TILES_HEIGHT
+from ..config import TILES_WIDTH, TILES_HEIGHT, DIRECTIONS
 
 
 class Agent:
     def __init__(self, grid: list[list[int]]) -> None:
-        self.explored = [Node(1, 1)]
-        self.frontier = [
-            Node(0, 1, self.explored[0]),
-            Node(2, 1, self.explored[0]),
-            Node(1, 0, self.explored[0]),
-            Node(1, 2, self.explored[0])
-        ]
-
         self.grid = grid
-        self.grid[1][1] = 'e'
-        self.grid[0][1] = 'f'
-        self.grid[2][1] = 'f'
-        self.grid[1][0] = 'f'
-        self.grid[1][2] = 'f'
+
+        self.frontier = [Node(1, 1)]
+        self.explored = []
+        self.path = []
 
         self.path_found = False
+        self.finished = False
 
     @staticmethod
     def _goal_test(node: Node) -> bool:
-        if node.y == TILES_HEIGHT - 2:
-            print(node)
+        return node.x == (TILES_WIDTH - 2) and node.y == (TILES_HEIGHT - 2)
 
-        return node.x == TILES_WIDTH - 2 and node.y == TILES_HEIGHT - 2
-
-    def _find_path(self, node: Node) -> None:
+    def _get_path(self, node: Node) -> None:
         self.path_found = True
-        print('Goal reached')
 
-        cur_node = node
-        while cur_node.parent is not None:
-            cur_node = cur_node.parent
-            self.grid[cur_node.y][cur_node.x] = 'p'
-        self.grid[TILES_HEIGHT - 2][TILES_WIDTH - 2] = 'p'
+        while node:
+            self.path.append(node)
+            node = node.parent
 
-    def _update_frontier(self, current: Node) -> None:
-        x, y = current.x, current.y
+    def _get_neighbors(self, node: Node) -> list[Node]:
+        x, y = node.x, node.y
+        nodes = []
 
-        new_nodes = []
-        if x != 0 and self.grid[y][x - 1] == ' ':
-            self.grid[y][x - 1] = 'f'
-            new_nodes.append(Node(x - 1, y, current))
-        if (x + 1) != TILES_WIDTH and self.grid[y][x + 1] == ' ':
-            self.grid[y][x + 1] = 'f'
-            new_nodes.append(Node(x + 1, y, current))
-        if y != 0 and self.grid[y - 1][x] == ' ':
-            self.grid[y - 1][x] = 'f'
-            new_nodes.append(Node(x, y - 1, current))
-        if (y + 1) != TILES_WIDTH and self.grid[y + 1][x] == ' ':
-            self.grid[y + 1][x] = 'f'
-            new_nodes.append(Node(x, y + 1, current))
+        for dx, dy in DIRECTIONS:
+            nx, ny = (x + dx), (y + dy)
+            if 0 <= nx < TILES_WIDTH and 0 <= ny < TILES_HEIGHT:
+                if self.grid[ny][nx] == ' ':
+                    nodes.append(Node(nx, ny, node))
 
-        for item in new_nodes:
-            if self._goal_test(item):
-                self._find_path(item)
+        return nodes
 
-        self.frontier = [*self.frontier, *new_nodes]
-
-    def update(self) -> None:
+    def _remove(self) -> Node:
         raise NotImplementedError
+
+    def step(self) -> bool:
+        if self.finished:
+            return True
+        if not self.frontier:
+            self.finished = True
+            return True
+
+        node = self._remove()
+        if self._goal_test(node):
+            self._get_path(node)
+            self.finished = True
+            return True
+
+        self.explored.append(node)
+
+        for child in self._get_neighbors(node):
+            if child not in self.explored and child not in self.frontier:
+                self.frontier.append(child)
+
+        return False
+
