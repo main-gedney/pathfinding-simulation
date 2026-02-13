@@ -17,7 +17,7 @@ class Application:
 
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
         pygame.display.set_caption('Pathfinding Simulation')
-        pygame.display.set_icon(pygame.image.load('icon.png'))
+        pygame.display.set_icon(pygame.image.load('media/icon.png'))
         self.clock = pygame.time.Clock()
 
         self.grid = generate_grid()
