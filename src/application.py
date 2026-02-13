@@ -3,7 +3,7 @@ from sys import exit
 
 from .agents import *
 from .config import *
-from .grid import generate_grid
+from .grid import generate_grid, generate_empty_grid
 from .renderer import Renderer
 
 agents = [DepthFirst, BreadthFirst, BestFirst, AStar]
@@ -24,6 +24,7 @@ class Application:
         self.agent_index = 0
         self.agent = agents[self.agent_index](self.grid)
 
+        self.mouse_down = []
         self.running = False
 
     @staticmethod
@@ -35,6 +36,17 @@ class Application:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self._quit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self.mouse_down.append(1)
+                elif event.button == 3:
+                    self.mouse_down.append(3)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    self.mouse_down.remove(1)
+                elif event.button == 3:
+                    self.mouse_down.remove(3)
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -50,15 +62,22 @@ class Application:
                     if self.agent_index < 0:
                         self.agent_index = len(agents) - 1
                     self.agent = agents[self.agent_index](self.grid)
+                    self.running = False
                 elif event.key == pygame.K_RIGHT:
                     self.agent_index += 1
                     if self.agent_index == len(agents) :
                         self.agent_index = 0
                     self.agent = agents[self.agent_index](self.grid)
+                    self.running = False
 
                 elif event.key == pygame.K_g:
                     if not self.running:
                         self.grid = generate_grid()
+                        self.renderer.update_walls(self.grid)
+                        self.agent = agents[self.agent_index](self.grid)
+                elif event.key == pygame.K_c:
+                    if not self.running:
+                        self.grid = generate_empty_grid()
                         self.renderer.update_walls(self.grid)
                         self.agent = agents[self.agent_index](self.grid)
                 elif event.key == pygame.K_r:
@@ -73,6 +92,17 @@ class Application:
 
             if not self.agent.finished and self.running:
                 self.agent.step()
+
+            if  self.mouse_down and not self.running:
+                mouse_pos = pygame.mouse.get_pos()
+                x, y = ((mouse_pos[0] // TILE_SIZE), ((mouse_pos[1] - HEADER_SIZE) // TILE_SIZE))
+
+                if self.grid[y][x] == ' ' and self.mouse_down[0] == 1:
+                    self.grid[y][x] = '#'
+                if self.grid[y][x] == '#' and self.mouse_down[0] == 3:
+                    self.grid[y][x] = ' '
+
+                self.renderer.update_walls(self.grid)
 
             self.renderer.render(self.agent)
 

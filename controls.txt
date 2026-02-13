@@ -1,5 +1,8 @@
 [ESC] - Exit Application
 [SPACE] - Pause/Play pathfinding
 [G] - Generate new grid
+[C] - Clear screen
 [R] - Reset agent
 [<] [>] - Change search agent
+(MOUSE 1) - Add tiles
+(MOUSE 3) - Remove tiles

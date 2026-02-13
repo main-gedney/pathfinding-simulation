@@ -26,3 +26,9 @@ def generate_grid() -> list[list[int]]:
             grid[TILES_HEIGHT - y][TILES_WIDTH - x] = ' '
 
     return grid
+
+
+def generate_empty_grid() -> list[list[int]]:
+    print('Generating new empty grid')
+
+    return [[' '] * TILES_WIDTH for _ in range(TILES_HEIGHT)]
