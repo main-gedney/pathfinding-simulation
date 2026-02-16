@@ -86,6 +86,18 @@ class Application:
                     self.running = False
                     self.agent = agents[self.agent_index](self.grid)
 
+    def _draw_tiles(self) -> None:
+        mouse_pos = pygame.mouse.get_pos()
+        x, y = ((mouse_pos[0] // TILE_SIZE), ((mouse_pos[1] - HEADER_SIZE) // TILE_SIZE))
+
+        if 0 <= y < TILES_HEIGHT and 0 <= x < TILES_WIDTH:
+            if self.grid[y][x] == ' ' and self.mouse_down[0] == 1:
+                self.grid[y][x] = '#'
+            if self.grid[y][x] == '#' and self.mouse_down[0] == 3:
+                self.grid[y][x] = ' '
+
+        self.renderer.update_walls(self.grid)
+
     def run(self) -> None:
         print('Running application')
 
@@ -96,15 +108,7 @@ class Application:
                 self.agent.step()
 
             if  self.mouse_down and not self.running:
-                mouse_pos = pygame.mouse.get_pos()
-                x, y = ((mouse_pos[0] // TILE_SIZE), ((mouse_pos[1] - HEADER_SIZE) // TILE_SIZE))
-
-                if self.grid[y][x] == ' ' and self.mouse_down[0] == 1:
-                    self.grid[y][x] = '#'
-                if self.grid[y][x] == '#' and self.mouse_down[0] == 3:
-                    self.grid[y][x] = ' '
-
-                self.renderer.update_walls(self.grid)
+                self._draw_tiles()
 
             self.renderer.render(self.agent)
 
