@@ -90,11 +90,14 @@ class Application:
         mouse_pos = pygame.mouse.get_pos()
         x, y = ((mouse_pos[0] // TILE_SIZE), ((mouse_pos[1] - HEADER_SIZE) // TILE_SIZE))
 
-        if 0 <= y < TILES_HEIGHT and 0 <= x < TILES_WIDTH:
-            if self.grid[y][x] == ' ' and self.mouse_down[0] == 1:
-                self.grid[y][x] = '#'
-            if self.grid[y][x] == '#' and self.mouse_down[0] == 3:
-                self.grid[y][x] = ' '
+        if 0 > y >= TILES_HEIGHT and 0 > x >= TILES_WIDTH: return
+
+        if x == (TILES_WIDTH - 2) and y == (TILES_HEIGHT - 2): return
+            
+        if self.grid[y][x] == ' ' and self.mouse_down[0] == 1:
+            self.grid[y][x] = '#'
+        if self.grid[y][x] == '#' and self.mouse_down[0] == 3:
+            self.grid[y][x] = ' '
 
         self.renderer.update_walls(self.grid)
 
