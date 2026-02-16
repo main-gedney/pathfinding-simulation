@@ -44,7 +44,7 @@ class Renderer:
 
         surface.blit(self.walls, (0, 0))
         self._render_agent(surface,  agent)
-        self._draw_rect(((TILES_WIDTH - 2) * TILE_SIZE), ((TILES_HEIGHT - 2) * TILE_SIZE), PATH_COLOR, self.walls)
+        self._draw_rect(((TILES_WIDTH - 2) * TILE_SIZE), ((TILES_HEIGHT - 2) * TILE_SIZE), PATH_COLOR, surface)
 
         self.screen.fill(HEADER_COLOR)
         self.screen.blit(surface, (0, HEADER_SIZE))
